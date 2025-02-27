@@ -1,49 +1,39 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>出張版texttyoBB</title>
-  <style>
-    body {
-      text-align: center;
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-    }
-    iframe {
-      width: 90%;
-      height: 80vh;
-      border: none;
-      margin-top: 20px;
-      background: white;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reverse Proxy Browser</title>
 </head>
 <body>
-  <h1>出張版texttyoBB</h1>
-  <p>表示したいURLを入力してください:</p>
-  <form id="urlForm">
-    <input type="text" id="urlInput" placeholder="https://example.com" size="50" required>
-    <button type="submit">表示</button>
-  </form>
-  <iframe id="contentFrame"></iframe>
+<h1>Reverse Proxy Browser</h1>
 
-  <script>
-    document.getElementById("urlForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      const url = document.getElementById("urlInput").value;
+<form id="proxyForm">
+    <input type="url" id="urlInput" placeholder="URLを入力してください">
+    <button type="submit">アクセスする</button>
+</form>
 
-      if (!url.startsWith("http")) {
-        alert("正しいURLを入力してください！");
-        return;
-      }
+<div id="proxyContent"></div>
 
-      document.getElementById("contentFrame").src = url;
-    });
-  </script>
+<script>
+document.getElementById("proxyForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const url = document.getElementById("urlInput").value;
+    if (url) {
+        loadWebPage(url);
+    }
+});
+
+function loadWebPage(url) {
+    const proxyUrl = "https://your-deno-deploy-url/?url=" + encodeURIComponent(url);
+    fetch(proxyUrl)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("proxyContent").innerHTML = data;
+        })
+        .catch(error => console.error("Error fetching content:", error));
+}
+</script>
+
 </body>
 </html>
