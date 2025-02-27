@@ -25,7 +25,7 @@ document.getElementById("proxyForm").addEventListener("submit", function(e) {
 });
 
 function loadWebPage(url) {
-    const proxyUrl = "https://your-deno-deploy-url/?url=" + encodeURIComponent(url);
+    const proxyUrl = "https://kjgd-syuttyo-tex-17.deno.dev/?url=" + encodeURIComponent(url);
     fetch(proxyUrl)
         .then(response => response.text())
         .then(data => {
