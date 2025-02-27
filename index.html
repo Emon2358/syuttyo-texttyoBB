@@ -2,77 +2,48 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <title>出張版texttyoBB (GitHub Pages版)</title>
+  <title>出張版texttyoBB</title>
   <style>
     body {
-      background-image: url('https://f4.bcbits.com/img/0011628734_100.png');
-      background-size: cover;
-      background-position: center;
-      color: white;
       text-align: center;
       font-family: Arial, sans-serif;
-      padding-top: 50px;
+      background-color: black;
+      color: white;
     }
     input, button {
       padding: 10px;
       font-size: 16px;
     }
-    #output {
+    iframe {
+      width: 90%;
+      height: 80vh;
+      border: none;
       margin-top: 20px;
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 10px;
-      border-radius: 5px;
-      text-align: left;
-      max-width: 80%;
-      margin-left: auto;
-      margin-right: auto;
-      overflow-x: auto;
+      background: white;
     }
   </style>
 </head>
 <body>
-  <h1>出張版texttyoBB (GitHub Pages版)</h1>
-  <p>プロキシ先のURLを入力してください：</p>
-  <form id="proxyForm">
-    <input type="text" id="targetUrl" placeholder="https://example.com" size="50" required>
-    <button type="submit">送信</button>
+  <h1>出張版texttyoBB</h1>
+  <p>表示したいURLを入力してください:</p>
+  <form id="urlForm">
+    <input type="text" id="urlInput" placeholder="https://example.com" size="50" required>
+    <button type="submit">表示</button>
   </form>
-  <div id="output"></div>
+  <iframe id="contentFrame"></iframe>
 
   <script>
-    document.getElementById('proxyForm').addEventListener('submit', async function(event) {
+    document.getElementById("urlForm").addEventListener("submit", function(event) {
       event.preventDefault();
-      const targetUrl = document.getElementById('targetUrl').value;
-      if (!targetUrl.startsWith('http')) {
-        alert("有効なURLを入力してください");
+      const url = document.getElementById("urlInput").value;
+
+      if (!url.startsWith("http")) {
+        alert("正しいURLを入力してください！");
         return;
       }
 
-      try {
-        const response = await fetch(targetUrl, {
-          method: 'GET',
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
-          }
-        });
-
-        if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
-
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('text/html')) {
-          const text = await response.text();
-          document.getElementById('output').innerHTML = sanitizeHTML(text);
-        } else {
-          document.getElementById('output').textContent = "このコンテンツは表示できません（非HTML）。";
-        }
-      } catch (error) {
-        document.getElementById('output').textContent = "エラー: " + error.message;
-      }
+      document.getElementById("contentFrame").src = url;
     });
-
-    function sanitizeHTML(html) {
-      return html.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
   </script>
 </body>
 </html>
